@@ -80,12 +80,18 @@ rec
   findGitDependencies =
     { cargotomls
     , cargolock
+    , patchedGit
     }:
     let
       tomlDependencies = cargotoml:
         lib.filter (x: ! isNull x) (
           lib.mapAttrsToList
-            (k: v:
+            (k: unpatched:
+              let
+                v = (if patchedGit ? "${k}" then
+                  patchedGit."${k}"
+                else unpatched);
+              in
               if ! (lib.isAttrs v && builtins.hasAttr "git" v)
               then null
               else

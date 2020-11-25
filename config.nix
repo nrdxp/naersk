@@ -326,6 +326,11 @@ let
               )
           );
 
+    patchedGit = if (builtins.hasAttr "patch" toplevelCargotoml) then (
+      (lib.filterAttrs (n: v: v ? "git")
+        toplevelCargotoml.patch.crates-io)
+    ) else {};
+
     # Are we building a workspace (or is this a simple crate) ?
     isWorkspace = builtins.hasAttr "workspace" toplevelCargotoml;
 
