@@ -175,7 +175,7 @@ let
       # src: yes, root: no
       if hasSrc && ! hasRoot then
         if isPath src then
-          { src = lib.cleanSource src; root = src; }
+          { inherit src; root = src; }
         else { inherit src; root = src; }
         # src: yes, root: yes
       else if hasRoot && hasSrc then
@@ -183,7 +183,7 @@ let
         # src: no, root: yes
       else if hasRoot && ! hasSrc then
         if isPath root then
-          { inherit root; src = lib.cleanSource root; }
+          { inherit root; src = root; }
         else
           { inherit root; src = root; }
         # src: no, root: yes
