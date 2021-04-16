@@ -65,10 +65,6 @@ let
     builtins // import ./builtins
       { inherit lib writeText remarshal runCommand; };
 
-  # All the git dependencies, as a list
-  gitDependenciesList =
-    lib.concatLists (lib.mapAttrsToList (_: ds: ds) gitDependencies);
-
   # This unpacks all git dependencies:
   #   $out/rand
   #   $out/rand/Cargo.toml
@@ -127,7 +123,7 @@ let
           fi
         done <<< "$tomls"
       done < <(cat ${
-    builtins.toFile "git-deps-json" (builtins.toJSON gitDependenciesList)
+    builtins.toFile "git-deps-json" (builtins.toJSON gitDependencies)
     } | jq -cMr '.[]')
     '';
 
@@ -173,7 +169,7 @@ let
                 };
               }
           )
-          gitDependenciesList
+          gitDependencies
       );
     };
 
